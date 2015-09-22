@@ -1,0 +1,30 @@
+{
+  "name": "slacky",
+  "version": "0.0.1",
+  "description": "Slack web service",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "4.13.3",
+    "request": "2.63.0",
+    "cheerio": "0.19.0",
+    "slack-notify": "0.1.4"
+  },
+  "engines": {
+    "node": "0.12.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rsommerard/slack-playground"
+  },
+  "keywords": [
+    "node",
+    "heroku",
+    "express"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/rsommerard/slack-playground#readme",
+  "author": ""
+}

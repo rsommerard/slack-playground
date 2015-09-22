@@ -1,2 +1,3 @@
 # slack-playground
-Slack playground
+
+Slack web service playground
