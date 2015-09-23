@@ -229,6 +229,60 @@ app.get('/dwitch', function (req, res) {
   sullyData = dayNow + ':' + monthNow + "\n" + sullyData;
   fs.writeFileSync('./sully.txt', sullyData);
 
+  var sullyData = '';
+  fs.readFileSync('./sully.txt').toString().split('\n').forEach(function (line) {
+    if(line != '') {
+      sullyData += line + "#";
+    }
+  });
+
+  var dwitchData = '';
+  fs.readFileSync('./dwitch.txt').toString().split('\n').forEach(function (line) {
+    if(line != '') {
+      dwitchData += line + "#";
+    }
+  });
+
+  var strToReturn = '*Sully*\n```';
+
+  var sullyNames = sullyData.split('#');
+
+  console.log(sullyNames);
+
+  for(var i = 0; i < sullyNames.length; i++) {
+    var firstName = getFirstName(sullyNames[i]);
+
+    strToReturn += firstName + '\n';
+  }
+
+  strToReturn += '```\n\n*Dwitch\'*\n```'
+
+  var dwitchNames = dwitchData.split('#');
+
+  console.log(dwitchNames);
+
+  for(var i = 0; i < dwitchNames.length; i++) {
+    var firstName = getFirstName(dwitchNames[i]);
+
+    strToReturn += firstName + '\n';
+  }
+
+  strToReturn += '```';
+
+  console.log(strToReturn);
+
+  var user = req.param('user_name');
+  var chan = '@' + user;
+
+  slack.send({ text: strToReturn, username: "Qui mange où ?!", mrkdwn: true, icon_emoji: ':hamburger:', channel: chan  }, function (err) {
+    if (err) {
+      console.log('API error:', err);
+    } else {
+      console.log('Message received!');
+      return;
+    }
+  });
+
   res.sendStatus(200);
 });
 
@@ -295,6 +349,60 @@ app.get('/sully', function (req, res) {
 
   dwitchData = dayNow + ':' + monthNow + "\n" + dwitchData;
   fs.writeFileSync('./dwitch.txt', dwitchData);
+
+  var sullyData = '';
+  fs.readFileSync('./sully.txt').toString().split('\n').forEach(function (line) {
+    if(line != '') {
+      sullyData += line + "#";
+    }
+  });
+
+  var dwitchData = '';
+  fs.readFileSync('./dwitch.txt').toString().split('\n').forEach(function (line) {
+    if(line != '') {
+      dwitchData += line + "#";
+    }
+  });
+
+  var strToReturn = '*Sully*\n```';
+
+  var sullyNames = sullyData.split('#');
+
+  console.log(sullyNames);
+
+  for(var i = 0; i < sullyNames.length; i++) {
+    var firstName = getFirstName(sullyNames[i]);
+
+    strToReturn += firstName + '\n';
+  }
+
+  strToReturn += '```\n\n*Dwitch\'*\n```'
+
+  var dwitchNames = dwitchData.split('#');
+
+  console.log(dwitchNames);
+
+  for(var i = 0; i < dwitchNames.length; i++) {
+    var firstName = getFirstName(dwitchNames[i]);
+
+    strToReturn += firstName + '\n';
+  }
+
+  strToReturn += '```';
+
+  console.log(strToReturn);
+
+  var user = req.param('user_name');
+  var chan = '@' + user;
+
+  slack.send({ text: strToReturn, username: "Qui mange où ?!", mrkdwn: true, icon_emoji: ':hamburger:', channel: chan  }, function (err) {
+    if (err) {
+      console.log('API error:', err);
+    } else {
+      console.log('Message received!');
+      return;
+    }
+  });
 
   res.sendStatus(200);
 });
