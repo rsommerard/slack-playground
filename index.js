@@ -1,12 +1,13 @@
 var express = require('express');
 var request = require('request');
 var cheerio = require('cheerio');
+var iconv  = require('iconv-lite');
 
 // #wstest
-//var MY_SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/token';
+var MY_SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/token';
 
 // #cuisine
-var MY_SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/token';
+//var MY_SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/token';
 
 var slack = require('slack-notify')(MY_SLACK_WEBHOOK_URL);
 var app = express();
@@ -16,10 +17,13 @@ const URL = "http://www.crous-lille.fr/admin-site/restauration_menu_print_w.php?
 app.set('port', (process.env.PORT || 5000));
 
 app.get('/sully', function (req, res) {
-  request(URL, function (error, response, body) {
+  var requestOptions  = { encoding: null, method: "GET", uri: URL};
+  request(requestOptions, function (error, response, body) {
     if (!error && response.statusCode == 200) {
-      //console.log(body);
-      $ = cheerio.load(body);
+      var utf8Body = iconv.decode(new Buffer(body), "ISO-8859-1");
+      //console.log(utf8Body);
+
+      $ = cheerio.load(utf8Body);
       var dates = $('.menu_ru_date').get();
       var nbdays = dates.length;
       var dateNow = new Date();
@@ -52,7 +56,7 @@ app.get('/sully', function (req, res) {
 
         //menu += '```\n';
         for(var j = 0; j < nbPlats; j++) {
-          menu += $(plats[j]).html() + '\n';
+          menu += $(plats[j]).text() + '\n';
         }
 
         //menu += '```'
@@ -63,10 +67,9 @@ app.get('/sully', function (req, res) {
       }
 
       var strToReturn = '*Menu du sully du ' + date.toLowerCase() + '.*' + '\n\n>>>' + menu;
+      //console.log(strToReturn);
 
-      strToReturn = strToReturn.replace('&#xFFFD;', 'â');
-
-      slack.send({ text: strToReturn, username: "Maité", mrkdwn: true }, function (err) {
+      slack.send({ text: strToReturn, username: "Maité", mrkdwn: true, icon_emoji: null }, function (err) {
         if (err) {
           console.log('API error:', err);
         } else {

@@ -1,7 +1,7 @@
 {
-  "name": "slacky",
-  "version": "0.0.1",
-  "description": "Slack web service",
+  "name": "node-js-getting-started",
+  "version": "0.1.5",
+  "description": "A sample Node.js app using Express 4",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
@@ -10,14 +10,15 @@
     "express": "4.13.3",
     "request": "2.63.0",
     "cheerio": "0.19.0",
-    "slack-notify": "0.1.4"
+    "slack-notify": "0.1.4",
+    "iconv-lite": "0.4.11"
   },
   "engines": {
     "node": "0.12.7"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rsommerard/slack-playground"
+    "url": "git+https://github.com/heroku/node-js-getting-started.git"
   },
   "keywords": [
     "node",
@@ -25,6 +26,9 @@
     "express"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/rsommerard/slack-playground#readme",
+  "bugs": {
+    "url": "https://github.com/heroku/node-js-getting-started/issues"
+  },
+  "homepage": "https://github.com/heroku/node-js-getting-started#readme",
   "author": ""
 }
