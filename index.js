@@ -3,11 +3,13 @@ var request = require('request');
 var cheerio = require('cheerio');
 var iconv  = require('iconv-lite');
 
-// #wstest
-var MY_SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/token';
+const SULLY_TOKEN_EXPECTED = "";
 
-// #cuisine
-//var MY_SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/token';
+// #wstest
+//var MY_SLACK_WEBHOOK_URL = '';
+
+// @slackbot
+var MY_SLACK_WEBHOOK_URL = '';
 
 var slack = require('slack-notify')(MY_SLACK_WEBHOOK_URL);
 var app = express();
@@ -17,6 +19,13 @@ const URL = "http://www.crous-lille.fr/admin-site/restauration_menu_print_w.php?
 app.set('port', (process.env.PORT || 5000));
 
 app.get('/sully', function (req, res) {
+  var token = req.param('token');
+
+  if(token != SULLY_TOKEN_EXPECTED) {
+    res.sendStatus(403);
+    return;
+  }
+
   var requestOptions  = { encoding: null, method: "GET", uri: URL};
   request(requestOptions, function (error, response, body) {
     if (!error && response.statusCode == 200) {
@@ -69,7 +78,10 @@ app.get('/sully', function (req, res) {
       var strToReturn = '*Menu du sully du ' + date.toLowerCase() + '.*' + '\n\n>>>' + menu;
       //console.log(strToReturn);
 
-      slack.send({ text: strToReturn, username: "Maité", mrkdwn: true, icon_emoji: null }, function (err) {
+      var user = req.param('user_name');
+      var chan = '@' + user;
+
+      slack.send({ text: strToReturn, username: "Maité", mrkdwn: true, icon_emoji: null, channel: chan  }, function (err) {
         if (err) {
           console.log('API error:', err);
         } else {
